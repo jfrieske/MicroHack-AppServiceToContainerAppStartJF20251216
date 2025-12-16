@@ -1,11 +1,7 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-- name: Build and Push Image
-  run: |
-    az acr login --name registryjf20251216 --username ${{ secrets.ACR_USERNAME }} --password ${{ secrets.ACR_PASSWORD }} &&
-    docker build -t registryjf20251216.azurecr.io/microhack-webapp-jf20251216:1 -f Dockerfile . &&
-    docker push registryjf20251216.azurecr.io/microhack-webapp-jf20251216:1
+name: Build and Deploy to Container App
 
 on:
   workflow_dispatch:
@@ -30,3 +26,8 @@ jobs:
       
     - name: Build with dotnet
       run: dotnet build --no-restore
+      
+    - name: Build and Push Image
+      run:  az acr login --name microhackregistry --username ${{ secrets.ACR_USERNAME }} --password ${{ secrets.ACR_PASSWORD }} &&
+            docker build -t microhackregistry.azurecr.io/microhackapp:1 -f Dockerfile . &&
+            docker push microhackregistry.azurecr.io/microhackapp:1
